@@ -85,15 +85,18 @@ List* get_adj_nodes(Node* n){
       for (j = 0 ; j < 9 ; j++) {        
         if (n->sudo[i][j] == 0) {
           for (k = 1 ; k <= 9 ; k++) {
+            if(is_valid(n)){
             Node *adj_node = copy(n);
             adj_node->sudo[i][j] = k;
             pushBack(list, adj_node);
+            }
           }
           return list;
         }
       }
     }
     return list;
+
 }
 
 

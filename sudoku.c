@@ -43,6 +43,36 @@ void print_node(Node* n){
 }
 
 int is_valid(Node* n){
+    int i,j,k,p;
+    for(k=0;k<9;k++){
+      int num[10]={0,0,0,0,0,0,0,0,0,0};
+      for(p=0;p<9;p++){
+        i=3*(k/3)+(p/3);
+        j=3*(k%3)+(p%3);
+        if(n->sudo[i][j]!=0){
+          if(num[n->sudo[i][j]-1]==0){
+            num[n->sudo[i][j]-1]=n->sudo[i][j];
+          }else{
+            return 0;
+          }
+          int x,y;
+          int cont=0;
+          for(x=0;x<9;x++){
+            if(n->sudo[i][j]==n->sudo[x][j]){
+              cont++;
+            }
+          }
+          if(cont!=1)return 0;
+          cont=0;
+          for(y=0;y<9;y++){
+            if(n->sudo[i][j]==n->sudo[i][y]){
+              cont++;
+            }
+          }
+          if(cont!=1)return 0;
+        }
+      }
+    }
 
     return 1;
 }
@@ -50,15 +80,52 @@ int is_valid(Node* n){
 
 List* get_adj_nodes(Node* n){
     List* list=createList();
+    int i,j,k;  
+    for (i=0;i<9;i++){      
+      for (j=0;j<9;j++){        
+        if (n->sudo[i][j] == 0){
+          for (k=1;k<=9;k++){
+            Node* adj_node=copy(n);
+            adj_node->sudo[i][j]=k;
+            if(is_valid(adj_node))pushBack(list, adj_node);
+          }
+          return list;
+        }
+      }
+    }
     return list;
+
 }
 
 
 int is_final(Node* n){
-    return 0;
+    int i,j;
+    for(i=0;i<9;i++){
+      for(j=0;j<9;j++){
+        if(n->sudo[i][j]==0){
+          return 0;
+        }
+      }
+    }
+    return 1;
 }
 
 Node* DFS(Node* initial, int* cont){
+  Stack* S = createStack();
+  push(S, initial);
+  while(!is_empty(S)){
+     Node* n= top(S); 
+     pop(S);
+     if(is_final(n)){
+         return n;
+     }
+     List* l=get_adj_nodes(n);
+     Node* adj=first(l);
+     while(adj){
+        push(S,adj);
+        adj=next(l);
+     }
+  }
   return NULL;
 }
 
@@ -67,7 +134,7 @@ Node* DFS(Node* initial, int* cont){
 /*
 int main( int argc, char *argv[] ){
 
-  Node* initial= read_file("s12a.txt");;
+  Node* initial= read_file("s12a.txt");
 
   int cont=0;
   Node* final = DFS(initial, &cont);

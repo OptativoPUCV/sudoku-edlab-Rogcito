@@ -1,4 +1,4 @@
-
+[![Run on Repl.it](https://repl.it/badge/github/Rogcito/sudoku-edlab-Rogcito)](https://repl.it/github/Rogcito/sudoku-edlab-Rogcito)
 Resolviendo el sudoku con grafos
 =====
 
